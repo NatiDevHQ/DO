@@ -19,7 +19,7 @@ export const upsertUserProgress = async (courseId: number) => {
   if (!courseId) {
     throw new Error("course not found");
   }
-
+  throw new Error("course is empty");
   //todo :enable once units and lessons are added
   // if(!course.units.lengh || course.units[0].lessons.length){
   //   throw new Error("course is empty")
