@@ -15,15 +15,23 @@ export const List = ({ courses, activeCourseId }: Props) => {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
-  const onClick = (id: number) => {
-    if (pending) return;
+  const onClick = async (id: number) => {
+    try {
+      // If already active, just redirect
+      if (id === activeCourseId) {
+        router.push("/learn");
+        return;
+      }
 
-    if (id === activeCourseId) {
-      return router.push("/learn");
+      // Await server action
+      await upsertUserProgress(id);
+
+      // Redirect on client after progress is updated
+      router.push("/learn");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update progress"); // or use toast
     }
-    startTransition(() => {
-      upsertUserProgress(id);
-    });
   };
 
   return (
